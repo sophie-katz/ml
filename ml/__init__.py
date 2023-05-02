@@ -12,10 +12,3 @@
 #
 # You should have received a copy of the GNU General Public License along with Sophie's
 # ML Monorepo. If not, see <https://www.gnu.org/licenses/>.
-
-.venv
-__pycache__
-.mypy_cache
-.pytest_cache
-artifacts/checkpoints/
-artifacts/models/

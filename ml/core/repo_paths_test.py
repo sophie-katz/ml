@@ -13,9 +13,16 @@
 # You should have received a copy of the GNU General Public License along with Sophie's
 # ML Monorepo. If not, see <https://www.gnu.org/licenses/>.
 
-.venv
-__pycache__
-.mypy_cache
-.pytest_cache
-artifacts/checkpoints/
-artifacts/models/
+from .repo_paths import *
+import pathlib
+import pytest
+
+
+def test_get_repo_root_path_good() -> None:
+    result = get_repo_root_path()
+    assert (result / "ml").is_dir()
+
+
+def test_get_repo_root_path_bad() -> None:
+    with pytest.raises(Exception):
+        get_repo_root_path(pathlib.Path.home())

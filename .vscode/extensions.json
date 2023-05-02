@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "bungcip.better-toml"
+        "bungcip.better-toml",
+        "ms-python.python"
     ]
 }

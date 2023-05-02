@@ -24,3 +24,4 @@ A monorepo for my own learning about ML and for ML projects. Read [getting start
 ## Resources
 
 * [Notion](https://www.notion.so/Sophie-s-ML-258335c7373f4ac0a2ae48e2d86b294f?pvs=4) - Project management and documentation
+* [Google Drive](https://drive.google.com/drive/folders/1lz3AzvralduVFrl7rVMnP9Br_UToyqnA?usp=share_link) - Various documents

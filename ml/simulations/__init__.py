@@ -12,32 +12,3 @@
 #
 # You should have received a copy of the GNU General Public License along with Sophie's
 # ML Monorepo. If not, see <https://www.gnu.org/licenses/>.
-
-[tool.poetry]
-name = "ml"
-version = "0.1.0"
-description = "A monorepo for my own learning about ML and for ML projects."
-authors = ["Sophie Katz <sophie@sophiekatz.us>"]
-readme = "README.md"
-
-[tool.poetry.dependencies]
-python = ">=3.9 <3.10"
-tensorflow = ">=2.10 <2.11"
-tensorflow-io-gcs-filesystem = ">=0.31,<0.32"
-tensorflow-datasets = ">=4.8,<4.9"
-tensorflow-hub = "^0.13.0"
-keras-tuner = "^1.3.5"
-ipywidgets = "^8.0.6"
-numpy = "^1.24.3"
-
-
-[tool.poetry.group.dev.dependencies]
-black = "^23.3.0"
-mypy = "^1.2.0"
-pylance = "^0.4.4"
-pytest = "^7.3.1"
-ipykernel = "^6.22.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"

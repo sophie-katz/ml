@@ -23,3 +23,5 @@ __pycache__
 # Artifacts
 artifacts/checkpoints/
 artifacts/models/
+artifacts/data/*/intermediate/
+artifacts/data/*/cache/

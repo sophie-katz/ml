@@ -104,12 +104,12 @@ def get_dir_artifacts_data_intermediate(
     )
 
 
-def get_dir_artifacts_data_processed(
+def get_dir_artifacts_data_cache(
     project_name: str, cwd: Optional[pathlib.Path] = None
 ) -> pathlib.Path:
     _validate_project_name(project_name)
 
-    return get_repo_root_path(cwd) / "artifacts" / "data" / project_name / "processed"
+    return get_repo_root_path(cwd) / "artifacts" / "data" / project_name / "cache"
 
 
 def get_dir_checkpoints(

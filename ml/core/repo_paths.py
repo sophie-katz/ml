@@ -60,7 +60,16 @@ def _validate_project_name(project_name: str) -> None:
         )
 
 
-def get_repo_root_path(cwd: Optional[pathlib.Path] = None) -> pathlib.Path:
+def _optionally_create_and_return(path: pathlib.Path, create: bool) -> pathlib.Path:
+    if create:
+        os.makedirs(path, exist_ok=True)
+
+    return path
+
+
+def get_repo_root_path(
+    cwd: Optional[pathlib.Path] = None, create: bool = False
+) -> pathlib.Path:
     start: pathlib.Path
 
     if cwd is None:
@@ -83,46 +92,55 @@ def get_repo_root_path(cwd: Optional[pathlib.Path] = None) -> pathlib.Path:
             f'Git repository found in cwd or parent directories does not contain expected children (required: .vscode/, core/, README.md containing "Sophie\'s ML Monorepo", cwd: {start})'
         )
 
-    return result
+    return _optionally_create_and_return(result, create)
 
 
 def get_dir_artifacts_data_raw(
-    project_name: str, cwd: Optional[pathlib.Path] = None
+    project_name: str, cwd: Optional[pathlib.Path] = None, create: bool = False
 ) -> pathlib.Path:
     _validate_project_name(project_name)
 
-    return get_repo_root_path(cwd) / "artifacts" / "data" / project_name / "raw"
+    return _optionally_create_and_return(
+        get_repo_root_path(cwd) / "artifacts" / "data" / project_name / "raw", create
+    )
 
 
 def get_dir_artifacts_data_intermediate(
-    project_name: str, cwd: Optional[pathlib.Path] = None
+    project_name: str, cwd: Optional[pathlib.Path] = None, create: bool = False
 ) -> pathlib.Path:
     _validate_project_name(project_name)
 
-    return (
-        get_repo_root_path(cwd) / "artifacts" / "data" / project_name / "intermediate"
+    return _optionally_create_and_return(
+        get_repo_root_path(cwd) / "artifacts" / "data" / project_name / "intermediate",
+        create,
     )
 
 
 def get_dir_artifacts_data_cache(
-    project_name: str, cwd: Optional[pathlib.Path] = None
+    project_name: str, cwd: Optional[pathlib.Path] = None, create: bool = False
 ) -> pathlib.Path:
     _validate_project_name(project_name)
 
-    return get_repo_root_path(cwd) / "artifacts" / "data" / project_name / "cache"
+    return _optionally_create_and_return(
+        get_repo_root_path(cwd) / "artifacts" / "data" / project_name / "cache", create
+    )
 
 
 def get_dir_checkpoints(
-    project_name: str, cwd: Optional[pathlib.Path] = None
+    project_name: str, cwd: Optional[pathlib.Path] = None, create: bool = False
 ) -> pathlib.Path:
     _validate_project_name(project_name)
 
-    return get_repo_root_path(cwd) / "artifacts" / "checkpoints" / project_name
+    return _optionally_create_and_return(
+        get_repo_root_path(cwd) / "artifacts" / "checkpoints" / project_name, create
+    )
 
 
 def get_dir_models(
-    project_name: str, cwd: Optional[pathlib.Path] = None
+    project_name: str, cwd: Optional[pathlib.Path] = None, create: bool = False
 ) -> pathlib.Path:
     _validate_project_name(project_name)
 
-    return get_repo_root_path(cwd) / "artifacts" / "models" / project_name
+    return _optionally_create_and_return(
+        get_repo_root_path(cwd) / "artifacts" / "models" / project_name, create
+    )

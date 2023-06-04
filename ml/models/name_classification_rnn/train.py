@@ -21,16 +21,16 @@ from ml.models.name_classification_rnn.module import NameClassificationRNNModule
 from ml.core.repo_paths import get_dir_models
 
 
-def train() -> NameClassificationRNNModule:
+def train() -> NameClassificationRNN:
     dataset = PytorchNameCategorization()
 
     model = NameClassificationRNN(
-        len(dataset.alphabet_mapping()),
         HIDDEN_SIZE,
-        len(dataset.culture_name_mapping()),
+        dataset.alphabet_count(),
+        dataset.culture_name_count(),
     )
 
-    module = NameClassificationRNNModule(model)
+    module = NameClassificationRNNModule(dataset, model)
 
     trainer = pl.Trainer(max_epochs=1)
 
@@ -38,29 +38,18 @@ def train() -> NameClassificationRNNModule:
         module,
         train_dataloaders=T.utils.data.DataLoader(
             dataset,
-            shuffle=True,
+            sampler=T.utils.data.RandomSampler(dataset, num_samples=10000),
+            batch_size=None,
         ),
     )
 
     return model
 
-    # input_tensor = dataset[0][0]
-    # label_tensor = dataset[0][1]
-    # hidden_tensor = model.create_hidden_initial()
-
-    # output_tensor, hidden_tensor_next = model(
-    #     input_tensor[0].unsqueeze(0), hidden_tensor
-    # )
-
-    # print(
-    #     f"Name: {''.join(dataset.alphabet_mapping()[i.item()] for i in input_tensor.argmax(1))!r}, Label: {dataset.culture_name_mapping()[int(label_tensor.argmax().item())]!r}, Prediction: {dataset.culture_name_mapping()[int(output_tensor.argmax().item())]!r}",
-    # )
-
 
 if __name__ == "__main__":
     model = train()
 
-    model.my_save(
+    model.save(
         get_dir_models("name_classification_rnn", create=True)
         / "name_classification_rnn.pt"
     )

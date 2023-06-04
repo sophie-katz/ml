@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License along with Sophie's
 # ML Monorepo. If not, see <https://www.gnu.org/licenses/>.
 
-from typing import cast, Dict, Tuple
+from typing import cast, Tuple
 import torch as T
 import torch.nn as nn
 import pathlib
@@ -31,25 +31,23 @@ class NameClassificationRNN(nn.Module):
     def __init__(
         self,
         hidden_size: int,
-        index_to_alphabet_mapping: Dict[int, str],
+        alphabet_count: int,
         culture_name_count: int,
     ) -> None:
         super().__init__()
 
         self.hidden_size = hidden_size
-        self.input_to_hidden = nn.Linear(
-            len(index_to_alphabet_mapping) + hidden_size, hidden_size
-        )
+        self.input_to_hidden = nn.Linear(alphabet_count + hidden_size, hidden_size)
         self.input_to_output = nn.Linear(
-            len(index_to_alphabet_mapping) + hidden_size,
+            alphabet_count + hidden_size,
             culture_name_count,
         )
-        self.softmax = nn.LogSoftmax(dim=1)
+        self.softmax = nn.LogSoftmax(dim=0)
 
     def forward(
         self, input_tensor: T.Tensor, hidden_tensor: T.Tensor
     ) -> Tuple[T.Tensor, T.Tensor]:
-        combined_tensor = T.cat((input_tensor, hidden_tensor), 1)
+        combined_tensor = T.cat((input_tensor, hidden_tensor), 0)
         hidden_tensor = self.input_to_hidden(combined_tensor)
         output_tensor = self.input_to_output(combined_tensor)
         output_tensor = self.softmax(output_tensor)
@@ -57,23 +55,25 @@ class NameClassificationRNN(nn.Module):
         return output_tensor, hidden_tensor
 
     def create_hidden_initial(self) -> T.Tensor:
-        return T.zeros(1, self.hidden_size)
+        return T.zeros(self.hidden_size)
 
     def save(self, path: pathlib.Path) -> None:
         T.save(self, path)
 
     def infer(self, dataset: PytorchNameCategorization, name: str) -> str:
-        # nn.functional.one_hot(T.tensor(dataset.alphabet_mapping()[name[0]]))
+        input_tensor = dataset.encode_name(name)
+        hidden_tensor = self.create_hidden_initial()
 
-        # input_tensor = dataset[0][0]
-        # label_tensor = dataset[0][1]
-        # hidden_tensor = model.create_hidden_initial()
+        training = self.training
 
-        # output_tensor, hidden_tensor_next = model(
-        #     input_tensor[0].unsqueeze(0), hidden_tensor
-        # )
+        try:
+            self.eval()
+            for i in range(input_tensor.shape[0]):
+                output_tensor, hidden_tensor = self.forward(
+                    input_tensor[i], hidden_tensor
+                )
+        finally:
+            if training:
+                self.train()
 
-        # print(
-        #     f"Name: {''.join(dataset.alphabet_mapping()[i.item()] for i in input_tensor.argmax(1))!r}, Label: {dataset.culture_name_mapping()[int(label_tensor.argmax().item())]!r}, Prediction: {dataset.culture_name_mapping()[int(output_tensor.argmax().item())]!r}",
-        # )
-        raise NotImplementedError()
+        return dataset.decode_culture_name(output_tensor)

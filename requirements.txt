@@ -1,7 +1,8 @@
 # This is for any dependencies that can't be installed with Poetry
 # 
 # 😒 PyTorch
---index-url https://download.pytorch.org/whl/cu118
-torch
-torchvision
-torchaudio
+--extra-index-url https://download.pytorch.org/whl/cu118
+torch==2.0.0
+torchvision==0.15.1
+torchaudio==2.0.0
+lightning==2.0

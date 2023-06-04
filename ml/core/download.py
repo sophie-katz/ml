@@ -28,6 +28,14 @@ def download_http(url: str, output_path: Union[str, pathlib.Path]) -> None:
     response.raise_for_status()
 
     total_size = int(response.headers.get("content-length", 0))
+
+    if (
+        pathlib.Path(output_path).exists()
+        and pathlib.Path(output_path).stat().st_size == total_size
+    ):
+        print("  File already downloaded.")
+        return
+
     progress_bar = tqdm(total=total_size, unit="B", unit_scale=True)
 
     with open(output_path, "wb") as file:

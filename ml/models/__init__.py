@@ -12,19 +12,3 @@
 #
 # You should have received a copy of the GNU General Public License along with Sophie's
 # ML Monorepo. If not, see <https://www.gnu.org/licenses/>.
-
-# Python
-__pycache__
-.ipynb_checkpoints
-.mypy_cache
-.pytest_cache
-.venv
-
-# Artifacts
-artifacts/checkpoints/
-artifacts/models/
-artifacts/data/*/intermediate/
-artifacts/data/*/cache/
-
-# Training data
-lightning_logs/

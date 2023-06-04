@@ -13,18 +13,13 @@
 # You should have received a copy of the GNU General Public License along with Sophie's
 # ML Monorepo. If not, see <https://www.gnu.org/licenses/>.
 
-# Python
-__pycache__
-.ipynb_checkpoints
-.mypy_cache
-.pytest_cache
-.venv
+from ml.models.name_classification_rnn.model import NameClassificationRNN
+from ml.core.repo_paths import get_dir_models
+import gradio as gr
 
-# Artifacts
-artifacts/checkpoints/
-artifacts/models/
-artifacts/data/*/intermediate/
-artifacts/data/*/cache/
+if __name__ == "__main__":
+    model = NameClassificationRNN.load(
+        get_dir_models("name_classification_rnn") / "name_classification_rnn.pt"
+    )
 
-# Training data
-lightning_logs/
+    print(model)

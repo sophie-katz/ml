@@ -13,18 +13,19 @@
 # You should have received a copy of the GNU General Public License along with Sophie's
 # ML Monorepo. If not, see <https://www.gnu.org/licenses/>.
 
-# Python
-__pycache__
-.ipynb_checkpoints
-.mypy_cache
-.pytest_cache
-.venv
+from ml.data.pytorch_name_classification.pytorch import PytorchNameCategorization
 
-# Artifacts
-artifacts/checkpoints/
-artifacts/models/
-artifacts/data/*/intermediate/
-artifacts/data/*/cache/
 
-# Training data
-lightning_logs/
+def test_len() -> None:
+    dataset = PytorchNameCategorization()
+    assert len(dataset) == 20074
+
+
+def test_items() -> None:
+    dataset = PytorchNameCategorization()
+
+    assert dataset[0][0].shape == (6, 87)
+    assert dataset[0][1].shape == (18,)
+
+    assert dataset[100][0].shape == (5, 87)
+    assert dataset[100][1].shape == (18,)
